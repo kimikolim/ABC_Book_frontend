@@ -1,7 +1,9 @@
+import { Container, Typography } from '@mui/material'
 import React from 'react'
+import ResponsiveAppBar from '../../components/Appbar'
 import { usePermissions } from '../../hooks/authHooks'
 import { Role } from '../../models/Role'
-import { bookActions } from '../../redux/actions/bookActions'
+import BookList from './BookList'
 
 /**
  * Books page
@@ -12,9 +14,20 @@ import { bookActions } from '../../redux/actions/bookActions'
  */
 
 const Books = () => {
-    usePermissions([Role.ADMIN, Role.EDITOR, Role.MEMBER])
+  usePermissions([Role.ADMIN, Role.EDITOR, Role.MEMBER])
   return (
-    <div>Books Page</div>
+    <>
+      <ResponsiveAppBar />
+      <Container maxWidth="xl">
+        <Typography variant="h2" sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center', mt: 2 }}>
+          Books
+        </Typography>
+
+
+        <BookList />
+        
+      </Container>
+    </>
   )
 }
 
