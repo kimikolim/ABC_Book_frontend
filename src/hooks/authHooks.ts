@@ -17,10 +17,3 @@ export const usePermissions = (roles: Role[]) => {
     }
   })
 }
-
-// ["a", "b", "c"].indexOf("a")
-// 0
-// ["a", "b", "c"].indexOf("b")
-//1
-// ["a", "b", "c"].indexOf("d")
-//-1

@@ -7,7 +7,6 @@ export const login = async (email: string, password: string) => {
       password: "bcryptlater",
     })
     return data
-    //cookieStore.set("accessToken", response.data.accessToken, { path: '/' })
   } catch (error: any) {
     console.error(error.response.data.message)
   }

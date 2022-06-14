@@ -4,7 +4,7 @@ import { authActions } from "../../redux/actions/authActions"
 
 const Login: React.FC = () => {
   const handleLogin = () => {
-    //use redux to dispatch login
+    //use redux actions to dispatch login
     authActions.login("kahoot@meme.com", "bcryptlater")
   }
 

@@ -7,8 +7,8 @@ export const authActions = {
       //   dispatch("LOGIN_ATTEMPT")
 
       const { token } = await login(username, password)
+      //store jwt token in cookie
       setAccessToken(token)
-      //store token in cookie
       //   dispatch("LOGIN_SUCCESS")
     } catch (error) {
       //   dispatch("LOGIN_FAILED", { errorMessage })

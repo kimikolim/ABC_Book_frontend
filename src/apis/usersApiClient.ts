@@ -6,10 +6,9 @@ export const getUsers = async () => {
     const {
       data: { message, users },
     } = await axios.get("http://localhost:3001/user", {
-      headers: { authorization: `bearer ${getAccessToken()}` },
+      headers: { authorization: `Bearer ${getAccessToken()}` },
     })
     return users
-    //cookieStore.set("accessToken", response.data.accessToken, { path: '/' })
   } catch (error: any) {
     console.error(error.response.data.message)
   }

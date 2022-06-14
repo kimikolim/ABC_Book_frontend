@@ -2,7 +2,19 @@ import React from "react"
 import { usePermissions } from "../../hooks/authHooks"
 import { Role } from "../../models/Role"
 
-export default function Users() {
-  usePermissions([Role.ADMIN])
-  return <div>users</div>
+/**
+ * Users Page
+ * Only accessible by Admin and Editor
+ * List all users
+ * Only Admin can add/remove/update users
+ * Features: sorting, pagination, filtering
+ */
+
+const Users = () => {
+usePermissions([Role.ADMIN, Role.EDITOR])
+  return (
+    <div>Users Page</div>
+  )
 }
+
+export default Users
