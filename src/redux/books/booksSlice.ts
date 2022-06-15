@@ -28,12 +28,14 @@ interface BookState {
   allBooks: IBook[]
   total: number
   isLoading: boolean
+  errorMessage: string | null
 }
 
 const initialState: BookState = {
   allBooks: [],
   total: 0,
   isLoading: false,
+  errorMessage: null
 }
 
 const bookSlice = createSlice({
@@ -51,6 +53,7 @@ const bookSlice = createSlice({
     })
     builder.addCase(getAllBooks.rejected, (state, action) => {
       state.isLoading = false
+      state.errorMessage = action.payload as string
     })
   },
 })
