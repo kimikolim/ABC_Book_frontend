@@ -10,9 +10,8 @@ import Grid from '@mui/material/Grid'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { authActions } from '../../redux/actions/authActions'
 import { useNavigate } from 'react-router-dom'
-import { getAccessToken } from '../../utils/accessToken'
+import AuthService from '../../apis/AuthService'
 
 function Copyright(props: any) {
   return (
@@ -64,8 +63,8 @@ export default function Login() {
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     //use redux actions to dispatch login
-  const result = await authActions.login(emailInput, passwordInput)
-  result ?  navigate('/dashboard') : navigate('/book')
+  const result = await AuthService.login(emailInput, passwordInput)
+  result ?  navigate('/home') : navigate('/book')
   }
 
   return (

@@ -1,7 +1,7 @@
 import { Container, Typography } from '@mui/material'
 import React from 'react'
 import ResponsiveAppBar from '../../components/Appbar'
-import { usePermissions } from '../../hooks/authHooks'
+import { useGuard } from '../../hooks/guardHooks'
 import { Role } from '../../models/Role'
 import BookList from './BookList'
 
@@ -14,18 +14,23 @@ import BookList from './BookList'
  */
 
 const Books = () => {
-  usePermissions([Role.ADMIN, Role.EDITOR, Role.MEMBER])
+  useGuard([Role.ADMIN, Role.EDITOR, Role.MEMBER])
   return (
     <>
       <ResponsiveAppBar />
       <Container maxWidth="xl">
-        <Typography variant="h2" sx={{ display: { xs: 'none', md: 'flex' }, justifyContent: 'center', mt: 2 }}>
+        <Typography
+          variant="h2"
+          sx={{
+            display: { xs: 'none', md: 'flex' },
+            justifyContent: 'center',
+            mt: 2,
+          }}
+        >
           Books
         </Typography>
 
-
         <BookList />
-        
       </Container>
     </>
   )
