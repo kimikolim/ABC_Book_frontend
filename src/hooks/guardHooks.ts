@@ -9,6 +9,8 @@ export const useGuard = (roles: Role[]) => {
     if (isAuthorised(roles)) {
       //jwt token expired?
       navigate('/home')
+    } else {
+      navigate('/login')
     }
   })
 }

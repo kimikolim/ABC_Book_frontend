@@ -11,7 +11,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
-import AuthService from '../../apis/AuthService'
+import { userLogin } from '../../redux/auth/authSlice'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
+import { useGuard } from '../../hooks/guardHooks'
+import { Role } from '../../models/Role'
+import { isAuthorised } from '../../utils/accessToken'
 
 function Copyright(props: any) {
   return (
@@ -38,12 +42,14 @@ const theme = createTheme()
 
 export default function Login() {
   const navigate = useNavigate()
+  const userState = useAppSelector((state) => state.auth)
+  const dispatch = useAppDispatch()
   const [isSignUp, setIsSignUp] = React.useState<boolean>(false)
- /**
-  * Login email and password focus
-  */
-  const [emailInput, setEmailInput] = React.useState<string>("")
-  const [passwordInput, setPasswordInput] = React.useState<string>("")
+  /**
+   * Login email and password focus
+   */
+  const [emailInput, setEmailInput] = React.useState<string>('')
+  const [passwordInput, setPasswordInput] = React.useState<string>('')
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmailInput(event.target.value)
   }
@@ -51,11 +57,22 @@ export default function Login() {
     setPasswordInput(event.target.value)
   }
 
-
   const handleSignUp = () => {
     // Sign up logic here
   }
 
+  React.useEffect(() => {
+    if (isAuthorised([Role.ADMIN, Role.EDITOR, Role.MEMBER])) {
+      navigate('/home')
+    }
+  })
+  
+
+  // React.useEffect(() => {
+  //   if (userState.token && userState.isLoggedIn) {
+  //     navigate('/home')
+  //   }
+  // }, [userState])
   /**
    * If login fails redirects to login page
    * If login successful redirects to dashboard
@@ -63,8 +80,7 @@ export default function Login() {
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     //use redux actions to dispatch login
-  const result = await AuthService.login(emailInput, passwordInput)
-  result ?  navigate('/home') : navigate('/book')
+    await dispatch(userLogin({ email: emailInput, password: passwordInput }))
   }
 
   return (
@@ -162,7 +178,7 @@ export default function Login() {
                 sx={{ mt: 3, mb: 2 }}
                 color={isSignUp ? 'secondary' : 'primary'}
               >
-								{isSignUp ? "Sign Up" : "Sign In"}
+                {isSignUp ? 'Sign Up' : 'Sign In'}
               </Button>
               <Grid container>
                 <Grid item xs>

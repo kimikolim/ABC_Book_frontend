@@ -25,24 +25,25 @@ export const getCurrentUserRole = () => {
 }
 
 export const isValidAccessToken = () => {
-  var decoded: any = decodeToken()
-  const currentTime = moment().unix()
-  const expirationTime = decoded.exp
-  const isValid = currentTime - expirationTime < 0
-  return isValid //return false
+  try {
+    var decoded: any = decodeToken()
+    const currentTime = moment().unix()
+    const expirationTime = decoded.exp
+    const isValid = currentTime - expirationTime < 0
+    return isValid //return boolean
+  } catch (error) {
+    return false
+  }
 }
 
 export const isAuthorised = (roles: Role[]) => {
   if (!isValidAccessToken()) {
     return false
   }
-
   const role = getCurrentUserRole() //role
-
   if (roles.indexOf(role) === -1) {
     return false
   }
-
   return true
 }
 

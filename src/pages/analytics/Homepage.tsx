@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ResponsiveAppBar from '../../components/Appbar'
 import { useGuard } from '../../hooks/guardHooks'
 import { Role } from '../../models/Role'
 
 const Homepage = () => {
-  useGuard([Role.ADMIN, Role.EDITOR, Role.MEMBER])
+    useGuard([Role.ADMIN, Role.EDITOR, Role.MEMBER])
+ 
   return (
     <>
       <ResponsiveAppBar />

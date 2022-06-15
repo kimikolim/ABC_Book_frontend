@@ -20,9 +20,9 @@ export const userLogin = createAsyncThunk<string, ILogin>(
         setAccessToken(token)
         return token
       } else {
+        // console.log(thunkAPI.rejectWithValue(message));
         return thunkAPI.rejectWithValue(message)
       }
-      //   dispatch("LOGIN_SUCCESS")
     } catch (error) {
       return thunkAPI.rejectWithValue('Something went wrong')
     }
@@ -33,7 +33,7 @@ interface IAuthState {
   token?: string | null
   isLoading: boolean
   isError: boolean
-  errorMessage?: string
+  errorMessage: string | null
   isLoggedIn: boolean
 }
 
@@ -42,6 +42,7 @@ const initialState: IAuthState = {
   isLoading: false,
   isError: false,
   isLoggedIn: false,
+  errorMessage: null
 }
 
 const authSlice = createSlice({
@@ -54,19 +55,22 @@ const authSlice = createSlice({
       state.token = action.payload
     })
     builder.addCase(userLogin.fulfilled, (state, action) => {
+      console.log(action);
       state.isLoading = false
       state.token = action.payload
       state.isError = false
       state.isLoggedIn = true
+      state.errorMessage = null
     })
     builder.addCase(userLogin.rejected, (state, action) => {
       state.isLoading = false
       state.isError = true
       state.isLoggedIn = false
+      state.errorMessage = action.payload as string
     })
   },
 })
 
-console.log(authSlice)
+// console.log(authSlice)
 
 export default authSlice.reducer

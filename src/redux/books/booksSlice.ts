@@ -1,13 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import BookService from '../../apis/BookService'
 
-export const getAllBooks: any = createAsyncThunk<IBook[]>(
+export const getAllBooks = createAsyncThunk<IBook[]>(
   'books/getAllBooks',
   async (payload, thunkAPI) => {
     try {
-      console.log(payload)
-      console.log(thunkAPI)
-      console.log(thunkAPI.getState())
       const { books } = await BookService.getAllBooks()
       return books
     } catch (error) {
@@ -29,7 +26,7 @@ export interface IBook {
 
 interface BookState {
   allBooks: IBook[]
-  total: 0
+  total: number
   isLoading: boolean
 }
 
@@ -43,15 +40,21 @@ const bookSlice = createSlice({
   name: 'books',
   initialState,
   reducers: {},
-  extraReducers: {
-    [getAllBooks.fulfilled]: (state, action) => {
-      // console.log(action);
+  extraReducers: (builder) => {
+    builder.addCase(getAllBooks.pending, (state, action) => {
+      state.isLoading = true
+    })
+    builder.addCase(getAllBooks.fulfilled, (state, action) => {
       state.isLoading = false
       state.allBooks = action.payload
-    },
+      state.total = action.payload.length
+    })
+    builder.addCase(getAllBooks.rejected, (state, action) => {
+      state.isLoading = false
+    })
   },
 })
 
-console.log(bookSlice)
+// console.log(bookSlice)
 
 export default bookSlice.reducer
