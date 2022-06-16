@@ -50,7 +50,7 @@ const BookCard: React.FC<Props> = ({
               {description}
             </Typography>
           </CardContent>
-          {!isAuthorised([Role.ADMIN , Role.EDITOR]) && (<CardActions>
+          {isAuthorised([Role.ADMIN , Role.EDITOR]) && (<CardActions>
             <Button size="small">Edit</Button>
             <Button size="small" color="error">
               Delete
