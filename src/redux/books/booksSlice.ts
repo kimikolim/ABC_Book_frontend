@@ -8,7 +8,7 @@ export const getAllBooks = createAsyncThunk<IBook[]>(
       const { books } = await BookService.getAllBooks()
       return books
     } catch (error) {
-      return thunkAPI.rejectWithValue('something went wrong')
+      return thunkAPI.rejectWithValue('Something went wrong')
     }
   },
 )

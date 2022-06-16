@@ -15,7 +15,9 @@ interface IBook {
 const BookService = {
   getAllBooks: async () => {
     try {
-      const { data } = await axios.get('http://localhost:3001/books/')
+      const { data } = await axios.get('http://localhost:3001/books/', {
+        headers: { authorization: `Bearer ${getAccessToken()}` },
+      })
       return data
     } catch (error: any) {
       console.error(error.response.data.message)

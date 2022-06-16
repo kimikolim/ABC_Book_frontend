@@ -1,134 +1,66 @@
-import React from 'react'
-import {
-  Button,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-} from '@mui/material'
+import React, { useEffect } from 'react'
+import { IconButton } from '@mui/material'
 import { Role } from '../../models/Role'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
+import { getAllUsers } from '../../redux/users/usersSlice'
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridColumnVisibilityModel,
+  GridRowParams,
+} from '@mui/x-data-grid'
+import { isAuthorised } from '../../utils/accessToken'
 
-//Hardcoded data
-interface Column {
-  id: 'name' | 'email' | 'role' 
-  label: string
-  minWidth?: number
-  align?: 'right'
-//   edit: () => {}
-}
 
-const columns: readonly Column[] = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'email', label: 'Email', minWidth: 100 },
-  {
-    id: 'role',
-    label: 'Role',
-    minWidth: 170,
-    align: 'right',
-  },
-//   {}
-]
-
-//Hardcoded data
-interface Data {
-  id: string
-  name: string
-  email: string
-  role: Role
-}
-
-const rows: Data[] = [
-  {
-    id: '62a6da98448bd41f44e2ab96',
-    name: 'Mike Oxlong',
-    email: 'troll@lol.com',
-    role: Role.MEMBER,
-  },
-  {
-    id: '62a6dac0448bd41f44e2ab99',
-    name: 'Ben Dover',
-    email: 'kahoot@meme.com',
-    role: Role.EDITOR,
-  },
-  {
-    id: '62a6dafa448bd41f44e2ab9c',
-    name: 'Justin Case',
-    email: 'super@careful.com',
-    role: Role.ADMIN,
-  },
-]
 const UsersTable = () => {
-  const [page, setPage] = React.useState(0)
-  const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const dispatch = useAppDispatch()
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage)
-  }
+  const users: any = useAppSelector((state) => state.users)
+  useEffect(() => {
+    dispatch(getAllUsers())
+  }, [])
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setRowsPerPage(+event.target.value)
-    setPage(0)
+
+  const columns = [
+    { field: 'id', headerName: 'Id', width: 150 },
+    { field: 'name', headerName: 'Name', width: 300 },
+    { field: 'email', headerName: 'Email', width: 300 },
+    { field: 'role', headerName: 'Role', width: 150 },
+    {
+      field: 'actions',
+      type: 'actions',
+      getActions: (params: GridRowParams) => [
+        <GridActionsCellItem icon={<EditIcon />} onClick={()=>{console.log(params.row.id)}} label="Edit" color='primary' />,
+        <GridActionsCellItem icon={<DeleteIcon />} onClick={()=>{}} label="Delete" color='error' />,
+      ]
+    }
+  ]
+
+  const [columnVisibilityModel, setColumnVisibilityModel] =
+    React.useState<GridColumnVisibilityModel>({
+      id: false,
+      actions: isAuthorised([Role.ADMIN]),
+    })
+
+  const data = {
+    columns: columns,
+    rows: users.allUsers,
   }
 
   return (
     <>
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-                      {columns.map((column) => {
-                        const value = row[column.id]
-                        return (
-                          <>
-                            <TableCell key={column.id} align={column.align}>
-                              {value}
-                            {/* <Button>Edit</Button>
-                            <Button>Delete</Button> */}
-                            </TableCell>
-
-                          </>
-                        )
-                      })}
-                    </TableRow>
-                  )
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+      <div style={{ height: 300, width: '100%' }}>
+        <DataGrid
+          {...data}
+          loading={users.isLoading}
+          columnVisibilityModel={columnVisibilityModel}
+          onColumnVisibilityModelChange={(newModel) =>
+            setColumnVisibilityModel(newModel)
+          }
         />
-      </Paper>
+      </div>
     </>
   )
 }

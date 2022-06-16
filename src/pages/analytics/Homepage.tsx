@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import ResponsiveAppBar from '../../components/Appbar'
 import { useGuard } from '../../hooks/guardHooks'
 import { Role } from '../../models/Role'

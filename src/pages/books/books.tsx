@@ -14,7 +14,7 @@ import BookList from './BookList'
  */
 
 const Books = () => {
-  useGuard([Role.ADMIN, Role.EDITOR, Role.MEMBER])
+  // useGuard([Role.ADMIN, Role.EDITOR, Role.MEMBER])
   return (
     <>
       <ResponsiveAppBar />

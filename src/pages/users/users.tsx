@@ -13,27 +13,6 @@ import UsersTable from './usersTable'
  * Features: sorting, pagination, filtering
  */
 
-// const userColumns =  [
-//   {
-//       "id": "62a6da98448bd41f44e2ab96",
-//       "name": "Mike Oxlong",
-//       "email": "troll@lol.com",
-//       "role": "MEMBER"
-//   },
-//   {
-//       "id": "62a6dac0448bd41f44e2ab99",
-//       "name": "Ben Dover",
-//       "email": "kahoot@meme.com",
-//       "role": "EDITOR"
-//   },
-//   {
-//       "id": "62a6dafa448bd41f44e2ab9c",
-//       "name": "Justin Case",
-//       "email": "super@careful.com",
-//       "role": "ADMIN"
-//   }
-// ]
-
 const Users: React.FC = () => {
   useGuard([Role.ADMIN, Role.EDITOR])
 

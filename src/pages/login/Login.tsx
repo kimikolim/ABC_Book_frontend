@@ -42,8 +42,8 @@ const theme = createTheme()
 
 export default function Login() {
   const navigate = useNavigate()
-  const userState = useAppSelector((state) => state.auth)
   const dispatch = useAppDispatch()
+  const currUserState = useAppSelector(state => state.auth)
   const [isSignUp, setIsSignUp] = React.useState<boolean>(false)
   /**
    * Login email and password focus
@@ -65,14 +65,8 @@ export default function Login() {
     if (isAuthorised([Role.ADMIN, Role.EDITOR, Role.MEMBER])) {
       navigate('/home')
     }
-  })
+  }, [currUserState])
   
-
-  // React.useEffect(() => {
-  //   if (userState.token && userState.isLoggedIn) {
-  //     navigate('/home')
-  //   }
-  // }, [userState])
   /**
    * If login fails redirects to login page
    * If login successful redirects to dashboard

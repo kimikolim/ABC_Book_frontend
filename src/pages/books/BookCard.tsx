@@ -15,7 +15,7 @@ interface Props {
 	author: string
 	yearPublished: number
 	availability: boolean
-  borrower: string | null
+  borrower?: string | null
 }
 
 const BookCard: React.FC<Props> = ({

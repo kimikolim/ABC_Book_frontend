@@ -107,7 +107,10 @@ const ResponsiveAppBar = () => {
               }}
             >
              
-                <MenuItem onClick={()=>{navigate('/books')}}>
+                <MenuItem onClick={()=>{
+                  console.log("clicked go to books");
+                  navigate('/books')
+                  }}>
                   <Typography textAlign="center">Books</Typography>
                 </MenuItem>
                 <MenuItem onClick={()=>{navigate('/users')}}>
