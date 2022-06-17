@@ -10,7 +10,7 @@ const BookList = () => {
   const dispatch = useAppDispatch()
   React.useEffect(() => {
    dispatch(getAllBooks())
-  }, [])
+  }, [allBooks])
 
   return (
     <>
@@ -21,6 +21,7 @@ const BookList = () => {
             return (
               <BookCard
                 key={b.id}
+                id={b.id}
                 title={b.title}
                 description={b.description}
                 genre={b.genre}

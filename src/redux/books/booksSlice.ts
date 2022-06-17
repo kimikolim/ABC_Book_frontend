@@ -13,8 +13,53 @@ export const getAllBooks = createAsyncThunk<IBook[]>(
   },
 )
 
+export const getBookById = createAsyncThunk<IBook, string>(
+  'books/getBookById',
+  async (payload, thunkAPI) => {
+    try {
+      const { book } = await BookService.getBookById(payload)
+      return book
+    } catch (error) {
+      return thunkAPI.rejectWithValue('Something went wrong')
+    }
+  },
+)
+export const createBook = createAsyncThunk<IBook, any>(
+  'books/createBook',
+  async (payload, thunkAPI) => {
+    try {
+      const { book } = await BookService.createBook(payload)
+      return book
+    } catch (error) {
+      return thunkAPI.rejectWithValue('Something went wrong')
+    }
+  },
+)
+export const updateBook = createAsyncThunk<IBook, any>(
+  'books/updateBook',
+  async ({id, data}, thunkAPI) => {
+    try {
+      const { book } = await BookService.updateBook(id, data)
+      return book
+    } catch (error) {
+      return thunkAPI.rejectWithValue('Something went wrong')
+    }
+  },
+)
+export const deleteBook = createAsyncThunk<IBook, string>(
+  'books/deleteBook',
+  async (payload, thunkAPI) => {
+    try {
+      const { book } = await BookService.deleteBook(payload)
+      return book
+    } catch (error) {
+      return thunkAPI.rejectWithValue('Something went wrong')
+    }
+  },
+)
+
 export interface IBook {
-  id?: string
+  id: string
   title: string
   description: string
   genre: string
@@ -26,6 +71,7 @@ export interface IBook {
 
 interface BookState {
   allBooks: IBook[]
+  book?: IBook | null
   total: number
   isLoading: boolean
   errorMessage: string | null
@@ -33,6 +79,7 @@ interface BookState {
 
 const initialState: BookState = {
   allBooks: [],
+  book: null,
   total: 0,
   isLoading: false,
   errorMessage: null
@@ -55,6 +102,34 @@ const bookSlice = createSlice({
       state.isLoading = false
       state.errorMessage = action.payload as string
     })
+    // builder.addCase(getBookById.pending, (state, action) => {})
+    builder.addCase(getBookById.fulfilled, (state, action) => {
+      state.book = action.payload 
+    })
+    // builder.addCase(getBookById.rejected, (state, action) => {})
+
+    // builder.addCase(createBook.pending, (state, action) => {})
+    builder.addCase(createBook.fulfilled, (state, action) => {
+      state.allBooks = state.allBooks.concat(action.payload)
+    })
+    // builder.addCase(createBook.rejected, (state, action) => {})
+
+    // builder.addCase(updateBook.pending, (state, action) => {})
+    builder.addCase(updateBook.fulfilled, (state, action) => {
+      const index = state.allBooks.findIndex(book => book.id === action.payload.id);
+      state.allBooks[index] = {
+        ...state.allBooks[index],
+        ...action.payload,
+      };
+    })
+    // builder.addCase(updateBook.rejected, (state, action) => {})
+
+    // builder.addCase(deleteBook.pending, (state, action) => {})
+    builder.addCase(deleteBook.fulfilled, (state, action) => {
+      const index = state.allBooks.findIndex(({ id }) => id === action.payload.id);
+      state.allBooks.splice(index, 1);
+    })
+    // builder.addCase(deleteBook.rejected, (state, action) => {})
   },
 })
 

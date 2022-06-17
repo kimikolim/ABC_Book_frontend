@@ -26,7 +26,9 @@ const BookService = {
 
   getBookById: async (id: string) => {
     try {
-      const { data } = await axios.get(`http://localhost:3001/books/${id}`)
+      const { data } = await axios.get(`http://localhost:3001/books/${id}`,  {
+        headers: { authorization: `Bearer ${getAccessToken()}` },
+      })
       return data
     } catch (error: any) {
       console.error(error.response.data.message)

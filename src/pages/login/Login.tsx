@@ -65,7 +65,7 @@ export default function Login() {
     if (isAuthorised([Role.ADMIN, Role.EDITOR, Role.MEMBER])) {
       navigate('/home')
     }
-  }, [currUserState])
+  })
   
   /**
    * If login fails redirects to login page
