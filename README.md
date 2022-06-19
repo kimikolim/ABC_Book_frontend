@@ -23,8 +23,25 @@ You will also see any lint errors in the console.
 1. React
 1. MaterialUI
 1. Redux Toolkit
-1. Toastify
+1. React Toastify
+1. JWT authentication
 
+&nbsp;
+
+## Completed So Far
+1. Full CRUD on Books
+1. Login Authentication with cookies
+1. Separation of roles with restricted access
+
+&nbsp;
+
+## To be completed
+1. CRUD on users
+1. Borrow and Return Logic
+1. Analytics Page
+
+
+&nbsp;
 ## &#x1F534; Warning
 This application is a work in progress and the early stages of development. 
 > Not for commercial use. Mavericks Consulting Pte Ltd ®
