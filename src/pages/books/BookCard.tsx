@@ -62,11 +62,11 @@ const BookCard: React.FC<Props> = ({
             <Typography gutterBottom variant="h4" component="div">
               {title}
             </Typography>
-            <Typography variant="body1">{description}</Typography>
+            <Typography gutterBottom variant="body1">{description}</Typography>
           </CardContent>
         
           <CardActions>
-            <Typography sx={{ flex: 1 }}>
+            <Typography gutterBottom sx={{ flex: 1 }}>
               Status: {availability ? 'Available' : 'Unavailable'}
             </Typography>
             <Button

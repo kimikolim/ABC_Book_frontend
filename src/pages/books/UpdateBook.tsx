@@ -1,26 +1,113 @@
 import { Box, Button, TextField, Typography } from '@mui/material'
 import { Container } from '@mui/system'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ResponsiveAppBar from '../../components/Appbar'
-import { useAppSelector } from '../../redux/hooks'
-import FormGroup from '@mui/material/FormGroup'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { updateBook } from '../../redux/books/booksSlice'
 
 const UpdateBook = () => {
-  const [checked, setChecked] = React.useState(true)
   const bookSelected = useAppSelector((state) => state.books.book)
+  const bookId = useParams()
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    // setIsEdit(editState)
+    if (bookSelected) {
+      setTitleInput(bookSelected!.title)
+      setAuthorInput(bookSelected!.author)
+      setDescriptionInput(bookSelected!.description)
+      setGenreInput(bookSelected!.genre)
+      setYearPublished(bookSelected!.yearPublished)
+      setBookAvailable(bookSelected!.availability)
+    }
+  }, [bookSelected])
+  /**
+   * Form states
+   */
+  const [titleInput, setTitleInput] = useState<string>('')
+  const [authorInput, setAuthorInput] = useState<string>('')
+  const [descriptionInput, setDescriptionInput] = useState<string>('')
+  const [genreInput, setGenreInput] = useState<string>('')
+  const [yearPublished, setYearPublished] = useState<number>()
+  const [bookAvailable, setBookAvailable] = useState(true)
+  console.log(bookAvailable)
+
   const navigate = useNavigate()
+
+  /**
+   * Handling of form inputs
+   */
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitleInput(event.target.value)
+  }
+
+  const handleAuthorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAuthorInput(event.target.value)
+  }
+
+  const handleDescriptionChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setDescriptionInput(event.target.value)
+  }
+  const handleGenreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setGenreInput(event.target.value)
+  }
+  const handleYearChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setYearPublished(+event.target.value)
+  }
 
   const handleBookAvailablilty = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setChecked(event.target.checked)
+    event.preventDefault()
+    setBookAvailable(event.target.checked)
   }
+
+  /**
+   * Handling of Cancel and Form submission buttons
+   */
 
   const handleCancelEdit = () => {
     navigate('/books')
+  }
+
+  const handleEditBookSubmit = async (
+    event: React.SyntheticEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault()
+    console.log({
+      id: bookId,
+      data: {
+        title: titleInput,
+        author: authorInput,
+        description: descriptionInput,
+        genre: genreInput,
+        yearPublished: yearPublished,
+        availability: bookAvailable,
+      },
+    })
+
+    // try {
+    //   await dispatch(
+    //     updateBook({
+    //       bookId,
+    //       {
+    //         title: titleInput,
+    //         author: authorInput,
+    //         description: descriptionInput,
+    //         genre:genreInput,
+    //         yearPublished: yearPublished,
+    //         availability: bookAvailable,
+    //       },
+    //     }),
+    //   )
+    // } catch (error: any) {
+    //   throw error
+    // }
   }
 
   return (
@@ -41,63 +128,82 @@ const UpdateBook = () => {
         maxWidth="xl"
         sx={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}
       >
-        <Box sx={{ width: '50%' }}>
-          <Box sx={{ display: 'flex' }}>
-            <TextField
-              sx={{ flexGrow: 1, margin: '5px' }}
-              label="Title"
-              multiline
-              maxRows={4}
-            />
-            <TextField
-              sx={{ flexGrow: 1, margin: '5px' }}
-              label="Author"
-              multiline
-              maxRows={4}
-            />
-          </Box>
-          <Box sx={{ display: 'flex' }}>
-            <TextField
-              sx={{ flexGrow: 1, margin: '5px' }}
-              label="Description"
-              multiline
-              maxRows={4}
-              rows={4}
-            />
-          </Box>
-
-          <Box sx={{ display: 'flex' }}>
-            <TextField
-              sx={{ flexGrow: 1, margin: '5px' }}
-              label="Genre"
-              multiline
-              maxRows={4}
-            />
-            <TextField
-              sx={{ flexGrow: 1, margin: '5px' }}
-              label="Year Published"
-              multiline
-              maxRows={4}
-            />
-          </Box>
-
-          <Box sx={{ display: 'flex', justifyContent: 'start' }}>
-            <Box sx={{ flex: 1 }}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={checked}
-                    onChange={handleBookAvailablilty}
-                    inputProps={{ 'aria-label': 'controlled' }}
-                  />
-                }
-                label={checked ? 'Available' : 'Unavailable'}
+        <form onClick={handleEditBookSubmit} style={{ width: '60%' }}>
+            <Box sx={{ display: 'flex' }}>
+              <TextField
+                sx={{ flexGrow: 1, margin: '5px' }}
+                label="Title"
+                required
+                multiline
+                maxRows={4}
+                type="text"
+                value={titleInput}
+                onChange={handleTitleChange}
+              />
+              <TextField
+                sx={{ flexGrow: 1, margin: '5px' }}
+                label="Author"
+                multiline
+                required
+                maxRows={4}
+                type="text"
+                value={authorInput}
+                onChange={handleAuthorChange}
               />
             </Box>
-            <Button sx={{ color: 'orange' }} onClick={handleCancelEdit}>Cancel</Button>
-            <Button sx={{}}>Submit</Button>
-          </Box>
-        </Box>
+            <Box sx={{ display: 'flex' }}>
+              <TextField
+                sx={{ flexGrow: 1, margin: '5px' }}
+                label="Description"
+                required
+                multiline
+                rows={4}
+                type="text"
+                value={descriptionInput}
+                onChange={handleDescriptionChange}
+              />
+            </Box>
+
+            <Box sx={{ display: 'flex' }}>
+              <TextField
+                sx={{ flexGrow: 1, margin: '5px' }}
+                label="Genre"
+                multiline
+                required
+                maxRows={4}
+                type="text"
+                value={genreInput}
+                onChange={handleGenreChange}
+              />
+              <TextField
+                sx={{ flexGrow: 1, margin: '5px' }}
+                label="Year Published"
+                type="number"
+                required
+                value={yearPublished}
+                onChange={handleYearChange}
+              />
+            </Box>
+
+            <Box sx={{ display: 'flex', justifyContent: 'start' }}>
+              <Box sx={{ flex: 1 }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={bookAvailable}
+                      onChange={handleBookAvailablilty}
+                      inputProps={{ checked: true }}
+                    />
+                  }
+                  label={bookAvailable ? 'Available' : 'Unavailable'}
+                />
+              </Box>
+              <Button sx={{ color: 'orange' }} onClick={handleCancelEdit}>
+                Cancel
+              </Button>
+              <Button type="submit">Submit</Button>
+            </Box>
+        </form>
       </Container>
     </>
   )
