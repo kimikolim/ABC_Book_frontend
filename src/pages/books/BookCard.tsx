@@ -11,6 +11,7 @@ import { useAppDispatch } from '../../redux/hooks'
 import React from 'react'
 import { deleteBook, getBookById } from '../../redux/books/booksSlice'
 import { useNavigate } from 'react-router-dom'
+import { setEditBookMode } from '../../redux/books/bookEditSlice'
 
 interface Props {
   id: string
@@ -46,6 +47,7 @@ const BookCard: React.FC<Props> = ({
   const dispatch = useAppDispatch()
 
   const handleEditBook = async() => {
+    dispatch(setEditBookMode())
     await dispatch(getBookById(id))
     navigate(`/book/${id}`)
   }

@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, TextField, Typography } from '@mui/material'
+import { Box, Button, TextField, Typography } from '@mui/material'
 import { Container } from '@mui/system'
 import React, { useEffect, useState } from 'react'
 import ResponsiveAppBar from '../../components/Appbar'
@@ -6,17 +6,19 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import { useNavigate, useParams } from 'react-router-dom'
-import { updateBook } from '../../redux/books/booksSlice'
+import { createBook, updateBook } from '../../redux/books/booksSlice'
 
 const UpdateBook = () => {
   const bookSelected = useAppSelector((state) => state.books.book)
-  const {id} = useParams()
-  
+  const { isEdit } = useAppSelector((state) => state.edit)
+  const { id } = useParams()
+  console.log(isEdit)
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     // setIsEdit(editState)
-    if (bookSelected) {
+    if (bookSelected && isEdit) {
       setTitleInput(bookSelected!.title)
       setAuthorInput(bookSelected!.author)
       setDescriptionInput(bookSelected!.description)
@@ -25,7 +27,7 @@ const UpdateBook = () => {
       setBookAvailable(bookSelected!.availability)
       setBorrowerInput(bookSelected!.borrower as string)
     }
-  }, [bookSelected])
+  }, [bookSelected, isEdit])
   /**
    * Form states
    */
@@ -40,7 +42,7 @@ const UpdateBook = () => {
   const navigate = useNavigate()
 
   /**
-   * Handling of form inputs
+   * Handling of form inputs fields
    */
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitleInput(event.target.value)
@@ -88,7 +90,7 @@ const UpdateBook = () => {
     try {
       await dispatch(
         updateBook({
-           id,
+          id,
           data: {
             title: titleInput,
             author: authorInput,
@@ -100,8 +102,33 @@ const UpdateBook = () => {
           },
         }),
       )
+      navigate('/books')
     } catch (error) {
       throw new Error('Update Book Failed')
+    }
+  }
+
+  const handleNewBookSubmit = async (
+    event: React.SyntheticEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault()
+    try {
+      await dispatch(
+        createBook({
+          data: {
+            title: titleInput,
+            author: authorInput,
+            description: descriptionInput,
+            genre: genreInput,
+            yearPublished: yearPublished,
+            availability: bookAvailable,
+            borrower: borrowerInput,
+          },
+        }),
+      )
+      navigate('/books')
+    } catch (error) {
+      throw new Error('Create New Book Failed')
     }
   }
 
@@ -116,14 +143,17 @@ const UpdateBook = () => {
           mt: 2,
         }}
       >
-        Edit
+        {isEdit ? 'Edit' : 'New Book'}
       </Typography>
 
       <Container
         maxWidth="xl"
         sx={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}
       >
-        <form onSubmit={handleEditBookSubmit} style={{ width: '60%' }}>
+        <form
+          onSubmit={isEdit ? handleEditBookSubmit : handleNewBookSubmit}
+          style={{ width: '60%' }}
+        >
           <Box sx={{ display: 'flex' }}>
             <TextField
               sx={{ flexGrow: 1, margin: '5px' }}

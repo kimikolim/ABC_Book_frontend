@@ -11,6 +11,8 @@ import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
 import { useNavigate } from 'react-router-dom'
+import { isAuthorised } from '../utils/accessToken'
+import { Role } from '../models/Role'
 
 
 const ResponsiveAppBar = () => {
@@ -61,12 +63,12 @@ const ResponsiveAppBar = () => {
             >
               Books
             </Button>
-            <Button
+            {isAuthorised([Role.ADMIN, Role.EDITOR]) && (<Button
               onClick={()=>{navigate('/users')}}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Users
-            </Button>
+            </Button>)}
             <Button
               onClick={handleLogout}
               sx={{ my: 2, color: 'white', display: 'block' }}

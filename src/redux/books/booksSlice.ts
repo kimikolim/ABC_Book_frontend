@@ -26,9 +26,9 @@ export const getBookById = createAsyncThunk<IBook, string>(
 )
 export const createBook = createAsyncThunk<IBook, any>(
   'books/createBook',
-  async (payload, thunkAPI) => {
+  async ({data}, thunkAPI) => {
     try {
-      const { book } = await BookService.createBook(payload)
+      const { book } = await BookService.createBook(data)
       return book
     } catch (error) {
       return thunkAPI.rejectWithValue('Something went wrong')

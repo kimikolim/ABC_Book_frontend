@@ -1,8 +1,12 @@
-import { Container, Typography } from '@mui/material'
+import { AddCircleOutline } from '@mui/icons-material'
+import { Box, Button, Container, Typography } from '@mui/material'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import ResponsiveAppBar from '../../components/Appbar'
 import { useGuard } from '../../hooks/guardHooks'
 import { Role } from '../../models/Role'
+import { setCreateBookMode } from '../../redux/books/bookEditSlice'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import BookList from './BookList'
 
 /**
@@ -15,6 +19,14 @@ import BookList from './BookList'
 
 const Books = () => {
   useGuard([Role.ADMIN, Role.EDITOR, Role.MEMBER])
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  const handleAddBookBtn = () => {
+    dispatch(setCreateBookMode())
+    navigate('/book/new')
+  }
+
   return (
     <>
       <ResponsiveAppBar />
@@ -29,6 +41,18 @@ const Books = () => {
         >
           Books
         </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'end', marginTop: '30px' }}>
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<AddCircleOutline />}
+            onClick={handleAddBookBtn}
+          >
+            <Typography sx={{ display: { xs: 'none', sm: 'flex' } }}>
+              Add New Book
+            </Typography>
+          </Button>
+        </Box>
 
         <BookList />
       </Container>

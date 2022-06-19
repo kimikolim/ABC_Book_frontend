@@ -55,7 +55,6 @@ const authSlice = createSlice({
       state.token = action.payload
     })
     builder.addCase(userLogin.fulfilled, (state, action) => {
-      console.log(action);
       state.isLoading = false
       state.token = action.payload
       state.isError = false

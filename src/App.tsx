@@ -2,7 +2,6 @@ import { Route, Routes } from 'react-router-dom'
 import './App.css'
 
 import Homepage from './pages/analytics/Homepage'
-import AddBook from './pages/books/AddBook'
 import Books from './pages/books/Books'
 import UpdateBook from './pages/books/UpdateBook'
 import Login from './pages/login/Login'
@@ -18,7 +17,7 @@ function App() {
         <Route path="/books" element={<Books />} />
         <Route path="/users" element={<Users />} />
 
-        <Route path="/addBook" element={<AddBook />} />
+        <Route path="/book/new" element={<UpdateBook />} />
         <Route path="/book/:id" element={<UpdateBook />} />
       </Routes>
     </div>
