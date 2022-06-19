@@ -13,12 +13,16 @@ import AdbIcon from '@mui/icons-material/Adb'
 import { useNavigate } from 'react-router-dom'
 import { isAuthorised } from '../utils/accessToken'
 import { Role } from '../models/Role'
+import { useCookies } from 'react-cookie'
+import { useAppDispatch } from '../redux/hooks'
+import { logoutAccount } from '../redux/auth/authSlice'
 
 
 const ResponsiveAppBar = () => {
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
-
+  const [cookie, setCookie, removeCookie] = useCookies(['accessToken']);
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
   }
@@ -27,7 +31,11 @@ const ResponsiveAppBar = () => {
     setAnchorElNav(null)
   }
 
-  const handleLogout = () => {}
+  const handleLogout = () => {
+    removeCookie('accessToken')
+    dispatch(logoutAccount())
+    navigate('/login')
+  }
 
   return (
     <AppBar position="static">

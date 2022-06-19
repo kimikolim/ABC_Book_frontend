@@ -30,7 +30,7 @@ You will also see any lint errors in the console.
 
 ## Completed So Far
 1. Full CRUD on Books
-1. Login Authentication with cookies
+1. Login/Logout Authentication with cookies
 1. Separation of roles with restricted access
 
 &nbsp;

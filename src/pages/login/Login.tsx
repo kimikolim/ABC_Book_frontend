@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { ToastContainer, toast } from 'react-toastify'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -13,7 +14,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
 import { userLogin } from '../../redux/auth/authSlice'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
-import { useGuard } from '../../hooks/guardHooks'
 import { Role } from '../../models/Role'
 import { isAuthorised } from '../../utils/accessToken'
 
@@ -43,7 +43,7 @@ const theme = createTheme()
 export default function Login() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const currUserState = useAppSelector(state => state.auth)
+  const { isLoggedIn } = useAppSelector((state) => state.auth)
   const [isSignUp, setIsSignUp] = React.useState<boolean>(false)
   /**
    * Login email and password focus
@@ -65,8 +65,9 @@ export default function Login() {
     if (isAuthorised([Role.ADMIN, Role.EDITOR, Role.MEMBER])) {
       navigate('/home')
     }
-  })
-  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn])
+
   /**
    * If login fails redirects to login page
    * If login successful redirects to dashboard
@@ -74,7 +75,11 @@ export default function Login() {
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     //use redux actions to dispatch login
-    await dispatch(userLogin({ email: emailInput, password: passwordInput }))
+    try {
+      await dispatch(userLogin({ email: emailInput, password: passwordInput }))
+    } catch (error) {
+      // toast.error("Login Failed. Please Try Again.")
+    }
   }
 
   return (

@@ -3,13 +3,14 @@ import jwt_decode from "jwt-decode"
 import moment from "moment"
 import { Role } from "../models/Role"
 
-export const getAccessToken = () => {
-  const cookies = new Cookies()
-  return cookies.get("accessToken")
-}
 export const setAccessToken = (accessToken: string) => {
   const cookies = new Cookies()
   return cookies.set("accessToken", accessToken)
+}
+
+export const getAccessToken = () => {
+  const cookies = new Cookies()
+  return cookies.get("accessToken")
 }
 
 const decodeToken = () => {

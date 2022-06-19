@@ -1,5 +1,5 @@
-import { Container, CssBaseline, Grid } from '@mui/material'
 import React from 'react'
+import { Container, CssBaseline, Grid } from '@mui/material'
 import BookCard from './BookCard'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks'
 import { getAllBooks } from '../../redux/books/booksSlice'
@@ -10,6 +10,7 @@ const BookList = () => {
   const dispatch = useAppDispatch()
   React.useEffect(() => {
    dispatch(getAllBooks())
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allBooks])
 
   return (
