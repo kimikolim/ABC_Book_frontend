@@ -12,6 +12,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
+        <Route index element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Homepage />} />
         <Route path="/books" element={<Books />} />

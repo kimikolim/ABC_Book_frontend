@@ -39,6 +39,8 @@ export const updateBook = createAsyncThunk<IBook, any>(
   'books/updateBook',
   async ({id, data}, thunkAPI) => {
     try {
+      console.log(id)
+      console.log(data)
       const { book } = await BookService.updateBook(id, data)
       return book
     } catch (error) {

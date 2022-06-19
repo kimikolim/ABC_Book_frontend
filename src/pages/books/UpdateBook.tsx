@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Box, Button, FormControl, TextField, Typography } from '@mui/material'
 import { Container } from '@mui/system'
 import React, { useEffect, useState } from 'react'
 import ResponsiveAppBar from '../../components/Appbar'
@@ -10,7 +10,8 @@ import { updateBook } from '../../redux/books/booksSlice'
 
 const UpdateBook = () => {
   const bookSelected = useAppSelector((state) => state.books.book)
-  const bookId = useParams()
+  const {id} = useParams()
+  
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -22,6 +23,7 @@ const UpdateBook = () => {
       setGenreInput(bookSelected!.genre)
       setYearPublished(bookSelected!.yearPublished)
       setBookAvailable(bookSelected!.availability)
+      setBorrowerInput(bookSelected!.borrower as string)
     }
   }, [bookSelected])
   /**
@@ -32,8 +34,8 @@ const UpdateBook = () => {
   const [descriptionInput, setDescriptionInput] = useState<string>('')
   const [genreInput, setGenreInput] = useState<string>('')
   const [yearPublished, setYearPublished] = useState<number>()
-  const [bookAvailable, setBookAvailable] = useState(true)
-  console.log(bookAvailable)
+  const [bookAvailable, setBookAvailable] = useState<boolean>(true)
+  const [borrowerInput, setBorrowerInput] = useState('')
 
   const navigate = useNavigate()
 
@@ -66,6 +68,9 @@ const UpdateBook = () => {
     event.preventDefault()
     setBookAvailable(event.target.checked)
   }
+  const handleBorrowerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBorrowerInput(event.target.value)
+  }
 
   /**
    * Handling of Cancel and Form submission buttons
@@ -79,35 +84,25 @@ const UpdateBook = () => {
     event: React.SyntheticEvent<HTMLFormElement>,
   ) => {
     event.preventDefault()
-    console.log({
-      id: bookId,
-      data: {
-        title: titleInput,
-        author: authorInput,
-        description: descriptionInput,
-        genre: genreInput,
-        yearPublished: yearPublished,
-        availability: bookAvailable,
-      },
-    })
 
-    // try {
-    //   await dispatch(
-    //     updateBook({
-    //       bookId,
-    //       {
-    //         title: titleInput,
-    //         author: authorInput,
-    //         description: descriptionInput,
-    //         genre:genreInput,
-    //         yearPublished: yearPublished,
-    //         availability: bookAvailable,
-    //       },
-    //     }),
-    //   )
-    // } catch (error: any) {
-    //   throw error
-    // }
+    try {
+      await dispatch(
+        updateBook({
+           id,
+          data: {
+            title: titleInput,
+            author: authorInput,
+            description: descriptionInput,
+            genre: genreInput,
+            yearPublished: yearPublished,
+            availability: bookAvailable,
+            borrower: borrowerInput,
+          },
+        }),
+      )
+    } catch (error) {
+      throw new Error('Update Book Failed')
+    }
   }
 
   return (
@@ -128,81 +123,95 @@ const UpdateBook = () => {
         maxWidth="xl"
         sx={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}
       >
-        <form onClick={handleEditBookSubmit} style={{ width: '60%' }}>
-            <Box sx={{ display: 'flex' }}>
-              <TextField
-                sx={{ flexGrow: 1, margin: '5px' }}
-                label="Title"
-                required
-                multiline
-                maxRows={4}
-                type="text"
-                value={titleInput}
-                onChange={handleTitleChange}
-              />
-              <TextField
-                sx={{ flexGrow: 1, margin: '5px' }}
-                label="Author"
-                multiline
-                required
-                maxRows={4}
-                type="text"
-                value={authorInput}
-                onChange={handleAuthorChange}
-              />
-            </Box>
-            <Box sx={{ display: 'flex' }}>
-              <TextField
-                sx={{ flexGrow: 1, margin: '5px' }}
-                label="Description"
-                required
-                multiline
-                rows={4}
-                type="text"
-                value={descriptionInput}
-                onChange={handleDescriptionChange}
-              />
-            </Box>
+        <form onSubmit={handleEditBookSubmit} style={{ width: '60%' }}>
+          <Box sx={{ display: 'flex' }}>
+            <TextField
+              sx={{ flexGrow: 1, margin: '5px' }}
+              label="Title"
+              required
+              multiline
+              maxRows={4}
+              type="text"
+              value={titleInput}
+              onChange={handleTitleChange}
+            />
+            <TextField
+              sx={{ flexGrow: 1, margin: '5px' }}
+              label="Author"
+              multiline
+              required
+              maxRows={4}
+              type="text"
+              value={authorInput}
+              onChange={handleAuthorChange}
+            />
+          </Box>
+          <Box sx={{ display: 'flex' }}>
+            <TextField
+              sx={{ flexGrow: 1, margin: '5px' }}
+              label="Description"
+              required
+              multiline
+              rows={4}
+              type="text"
+              value={descriptionInput}
+              onChange={handleDescriptionChange}
+            />
+          </Box>
 
+          <Box sx={{ display: 'flex' }}>
+            <TextField
+              sx={{ flexGrow: 1, margin: '5px' }}
+              label="Genre"
+              multiline
+              required
+              maxRows={4}
+              type="text"
+              value={genreInput}
+              onChange={handleGenreChange}
+            />
+            <TextField
+              sx={{ flexGrow: 1, margin: '5px' }}
+              label="Year Published"
+              type="number"
+              required
+              value={yearPublished}
+              onChange={handleYearChange}
+            />
+          </Box>
+
+          {!bookAvailable && (
             <Box sx={{ display: 'flex' }}>
               <TextField
                 sx={{ flexGrow: 1, margin: '5px' }}
-                label="Genre"
+                label="Borrowed By"
+                placeholder="Enter name of borrower"
                 multiline
-                required
-                maxRows={4}
+                rows={1}
                 type="text"
-                value={genreInput}
-                onChange={handleGenreChange}
-              />
-              <TextField
-                sx={{ flexGrow: 1, margin: '5px' }}
-                label="Year Published"
-                type="number"
-                required
-                value={yearPublished}
-                onChange={handleYearChange}
+                value={borrowerInput}
+                onChange={handleBorrowerChange}
               />
             </Box>
+          )}
 
-            <Box sx={{ display: 'flex', justifyContent: 'start' }}>
-              <Box sx={{ flex: 1 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={bookAvailable}
-                      onChange={handleBookAvailablilty}
-                      inputProps={{ checked: true }}
-                    />
-                  }
-                  label={bookAvailable ? 'Available' : 'Unavailable'}
-                />
-              </Box>
-              <Button sx={{ color: 'orange' }} onClick={handleCancelEdit}>
-                Cancel
-              </Button>
-              <Button type="submit">Submit</Button>
+          <Box sx={{ display: 'flex', justifyContent: 'start' }}>
+            <Box sx={{ flex: 1 }}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={bookAvailable}
+                    onChange={handleBookAvailablilty}
+                  />
+                }
+                label={bookAvailable ? 'Available' : 'Unavailable'}
+              />
             </Box>
+            <Button sx={{ color: 'orange' }} onClick={handleCancelEdit}>
+              Cancel
+            </Button>
+            <Button type="submit">Submit</Button>
+          </Box>
         </form>
       </Container>
     </>

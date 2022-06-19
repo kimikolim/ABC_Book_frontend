@@ -36,7 +36,7 @@ const ResponsiveAppBar = () => {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href="/login"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -108,7 +108,6 @@ const ResponsiveAppBar = () => {
             >
              
                 <MenuItem onClick={()=>{
-                  console.log("clicked go to books");
                   navigate('/books')
                   }}>
                   <Typography textAlign="center">Books</Typography>
