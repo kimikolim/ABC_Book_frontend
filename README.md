@@ -30,13 +30,13 @@ You will also see any lint errors in the console.
 
 ## Completed So Far
 1. Full CRUD on Books
+1. Full CRUD on Users
 1. Login/Logout Authentication with cookies
 1. Separation of roles with restricted access
 
 &nbsp;
 
 ## To be completed
-1. CRUD on users
 1. Borrow and Return Logic
 1. Analytics Page
 
