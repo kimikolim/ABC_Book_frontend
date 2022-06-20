@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react'
-import { IconButton } from '@mui/material'
 import { Role } from '../../models/Role'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
-import { getAllUsers, getUserById } from '../../redux/users/usersSlice'
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import {
+  getAllUsers,
+  getUserById,
+  removeUser,
+} from '../../redux/users/usersSlice'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 import {
   DataGrid,
   GridActionsCellItem,
@@ -15,11 +18,9 @@ import { isAuthorised } from '../../utils/accessToken'
 import { setEditUserMode } from '../../redux/users/userEditSlice'
 import { useNavigate } from 'react-router-dom'
 
-
 const UsersTable = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-
 
   const users: any = useAppSelector((state) => state.users)
   useEffect(() => {
@@ -32,6 +33,9 @@ const UsersTable = () => {
     navigate(`/user/${id}`)
   }
 
+  const handleDeleteUser = async (id: string) => {
+    await dispatch(removeUser(id))
+  }
 
   const columns = [
     { field: 'id', headerName: 'Id', width: 150 },
@@ -41,11 +45,26 @@ const UsersTable = () => {
     {
       field: 'actions',
       type: 'actions',
+      width: 150,
       getActions: (params: GridRowParams) => [
-        <GridActionsCellItem icon={<EditIcon />} onClick={() => {handleEditUser(params.row.id)}} label="Edit" color='primary' />,
-        <GridActionsCellItem icon={<DeleteIcon />} onClick={()=>{}} label="Delete" color='error' />,
-      ]
-    }
+        <GridActionsCellItem
+          icon={<EditIcon />}
+          onClick={() => {
+            handleEditUser(params.row.id)
+          }}
+          label="Edit"
+          color="primary"
+        />,
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          onClick={() => {
+            handleDeleteUser(params.row.id)
+          }}
+          label="Delete"
+          color="error"
+        />,
+      ],
+    },
   ]
 
   const [columnVisibilityModel, setColumnVisibilityModel] =

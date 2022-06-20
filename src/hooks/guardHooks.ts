@@ -13,5 +13,5 @@ export const useGuard = (roles: Role[]) => {
         navigate('/login')
       }
     }
-  })
+  }, [])
 }
