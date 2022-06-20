@@ -1,8 +1,12 @@
-import { Container, Typography } from '@mui/material'
+import { AddCircleOutline } from '@mui/icons-material'
+import { Box, Button, Container, Typography } from '@mui/material'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import ResponsiveAppBar from '../../components/Appbar'
 import { useGuard } from '../../hooks/guardHooks'
 import { Role } from '../../models/Role'
+import { useAppDispatch } from '../../redux/hooks'
+import { setCreateUserMode } from '../../redux/users/userEditSlice'
 import UsersTable from './usersTable'
 
 /**
@@ -15,6 +19,13 @@ import UsersTable from './usersTable'
 
 const Users: React.FC = () => {
   useGuard([Role.ADMIN, Role.EDITOR])
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  const handleAddUserBtn = () => {
+    dispatch(setCreateUserMode())
+    navigate('/user/new')
+  }
 
   return (
     <>
@@ -30,6 +41,18 @@ const Users: React.FC = () => {
         >
           ABC Users
         </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'end', marginTop: '30px' }}>
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<AddCircleOutline />}
+            onClick={handleAddUserBtn}
+          >
+            <Typography sx={{ display: { xs: 'none', sm: 'flex' } }}>
+              Add New User
+            </Typography>
+          </Button>
+        </Box>
       </Container>
       <Container maxWidth="xl" sx={{ mt: 5 }}>
         <UsersTable />

@@ -3,13 +3,15 @@ import booksReducer from './books/booksSlice'
 import authReducer from './auth/authSlice'
 import usersReducer from './users/usersSlice'
 import editReducer from './books/bookEditSlice'
+import editUserReducer from './users/userEditSlice'
 
 export const store = configureStore({
   reducer: {
     books: booksReducer,
     edit: editReducer,
     auth: authReducer,
-    users: usersReducer
+    users: usersReducer,
+    userEdit: editUserReducer
   }
 })
 

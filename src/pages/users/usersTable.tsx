@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { IconButton } from '@mui/material'
 import { Role } from '../../models/Role'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
-import { getAllUsers } from '../../redux/users/usersSlice'
+import { getAllUsers, getUserById } from '../../redux/users/usersSlice'
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -12,15 +12,25 @@ import {
   GridRowParams,
 } from '@mui/x-data-grid'
 import { isAuthorised } from '../../utils/accessToken'
+import { setEditUserMode } from '../../redux/users/userEditSlice'
+import { useNavigate } from 'react-router-dom'
 
 
 const UsersTable = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
 
   const users: any = useAppSelector((state) => state.users)
   useEffect(() => {
     dispatch(getAllUsers())
   }, [])
+
+  const handleEditUser = async (id: string) => {
+    dispatch(setEditUserMode())
+    await dispatch(getUserById(id))
+    navigate(`/user/${id}`)
+  }
 
 
   const columns = [
@@ -32,7 +42,7 @@ const UsersTable = () => {
       field: 'actions',
       type: 'actions',
       getActions: (params: GridRowParams) => [
-        <GridActionsCellItem icon={<EditIcon />} onClick={()=>{console.log(params.row.id)}} label="Edit" color='primary' />,
+        <GridActionsCellItem icon={<EditIcon />} onClick={() => {handleEditUser(params.row.id)}} label="Edit" color='primary' />,
         <GridActionsCellItem icon={<DeleteIcon />} onClick={()=>{}} label="Delete" color='error' />,
       ]
     }

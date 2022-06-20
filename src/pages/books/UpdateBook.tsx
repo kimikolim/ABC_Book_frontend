@@ -7,12 +7,14 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
 import { useNavigate, useParams } from 'react-router-dom'
 import { createBook, updateBook } from '../../redux/books/booksSlice'
+import { useGuard } from '../../hooks/guardHooks'
+import { Role } from '../../models/Role'
 
 const UpdateBook = () => {
+  useGuard([Role.ADMIN, Role.EDITOR])
   const bookSelected = useAppSelector((state) => state.books.book)
   const { isEdit } = useAppSelector((state) => state.edit)
   const { id } = useParams()
-  console.log(isEdit)
 
   const dispatch = useAppDispatch()
 
@@ -29,7 +31,7 @@ const UpdateBook = () => {
     }
   }, [bookSelected, isEdit])
   /**
-   * Form states
+   * Book Form states
    */
   const [titleInput, setTitleInput] = useState<string>('')
   const [authorInput, setAuthorInput] = useState<string>('')
