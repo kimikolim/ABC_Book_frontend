@@ -9,7 +9,11 @@ import { Role } from '../../models/Role'
 import { isAuthorised } from '../../utils/accessToken'
 import { useAppDispatch } from '../../redux/hooks'
 import React from 'react'
-import { deleteBook, getBookById } from '../../redux/books/booksSlice'
+import {
+  borrowBook,
+  deleteBook,
+  getBookById,
+} from '../../redux/books/booksSlice'
 import { useNavigate } from 'react-router-dom'
 import { setEditBookMode } from '../../redux/books/bookEditSlice'
 
@@ -22,6 +26,18 @@ interface Props {
   yearPublished: number
   availability: boolean
   borrower?: string | null
+}
+
+const modalStyles = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
 }
 
 /**
@@ -46,7 +62,7 @@ const BookCard: React.FC<Props> = ({
 
   const dispatch = useAppDispatch()
 
-  const handleEditBook = async() => {
+  const handleEditBook = async () => {
     dispatch(setEditBookMode())
     await dispatch(getBookById(id))
     navigate(`/book/${id}`)
@@ -54,6 +70,11 @@ const BookCard: React.FC<Props> = ({
 
   const handleDeleteBook = async () => {
     await dispatch(deleteBook(id))
+  }
+
+  const handleBorrowBtn = async () => {
+    console.log('borrow btn pressed')
+    await dispatch(borrowBook(id))
   }
 
   return (
@@ -64,9 +85,11 @@ const BookCard: React.FC<Props> = ({
             <Typography gutterBottom variant="h4" component="div">
               {title}
             </Typography>
-            <Typography gutterBottom variant="body1">{description}</Typography>
+            <Typography gutterBottom variant="body1">
+              {description}
+            </Typography>
           </CardContent>
-        
+
           <CardActions>
             <Typography gutterBottom sx={{ flex: 1 }}>
               Status: {availability ? 'Available' : 'Unavailable'}
@@ -75,12 +98,19 @@ const BookCard: React.FC<Props> = ({
               size="small"
               color={availability ? 'success' : 'error'}
               disabled={!availability}
+              onClick={handleBorrowBtn}
             >
               Borrow
             </Button>
           </CardActions>
           {isAuthorised([Role.ADMIN, Role.EDITOR]) && (
-            <CardActions sx={{ display: 'flex', justifyContent: 'center', marginTop: '5px'}}>
+            <CardActions
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: '5px',
+              }}
+            >
               <Button size="small" onClick={handleEditBook}>
                 Edit
               </Button>
@@ -97,19 +127,7 @@ const BookCard: React.FC<Props> = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box
-          sx={{
-            position: 'absolute' as 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 400,
-            bgcolor: 'background.paper',
-            border: '2px solid #000',
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
+        <Box sx={modalStyles}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Are you sure you want to permanently delete book - {title}
           </Typography>

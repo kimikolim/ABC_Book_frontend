@@ -25,6 +25,11 @@ export const getCurrentUserRole = () => {
     return decoded.role
 }
 
+export const getCurrentUserId = () => {
+  var decoded: any = decodeToken()
+    return decoded.id
+}
+
 export const isValidAccessToken = () => {
   try {
     var decoded: any = decodeToken()

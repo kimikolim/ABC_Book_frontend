@@ -26,7 +26,7 @@ const BookService = {
 
   getBookById: async (id: string) => {
     try {
-      const { data } = await axios.get(`http://localhost:3001/books/${id}`,  {
+      const { data } = await axios.get(`http://localhost:3001/books/${id}`, {
         headers: { authorization: `Bearer ${getAccessToken()}` },
       })
       return data
@@ -34,7 +34,7 @@ const BookService = {
       console.error(error.response.data.message)
     }
   },
-
+  // Only Admin || Editor
   createBook: async (bookDetails: IBook) => {
     try {
       const { data } = await axios.post(
@@ -76,10 +76,36 @@ const BookService = {
       console.error(error.response.data.message)
     }
   },
+
+  borrowBook: async (bookId: string) => {
+    try {
+      const { data } = await axios.put(
+        `http://localhost:3001/books/borrow/${bookId}`,
+        {
+          headers: { authorization: `Bearer ${getAccessToken()}` },
+        },
+        )
+        console.log(data);
+      return data
+    } catch (error: any) {
+      console.error(error.response.data.message)
+    }
+  },
+
+  returnBook: async (bookId: string) => {
+    try {
+      const { data } = await axios.put(
+        `http://localhost:3001/books/return/${bookId}`,
+        {
+          headers: { authorization: `Bearer ${getAccessToken()}` },
+        },
+      )
+      return data
+    } catch (error: any) {
+      console.error(error.response.data.message)
+    }
+  },
 }
 
 export default BookService
 
-// Only Admin || Editor
-
-// Borrow Logic Here
