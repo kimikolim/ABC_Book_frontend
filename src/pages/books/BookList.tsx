@@ -11,7 +11,7 @@ const BookList = () => {
   React.useEffect(() => {
    dispatch(getAllBooks())
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allBooks])
+  }, [])
 
   return (
     <>

@@ -77,15 +77,15 @@ const BookService = {
     }
   },
 
-  borrowBook: async (bookId: string) => {
+  borrowBook: async (id: string) => {
     try {
       const { data } = await axios.put(
-        `http://localhost:3001/books/borrow/${bookId}`,
+        `http://localhost:3001/books/borrow/${id}`,
+        {},
         {
           headers: { authorization: `Bearer ${getAccessToken()}` },
         },
-        )
-        console.log(data);
+      )
       return data
     } catch (error: any) {
       console.error(error.response.data.message)
@@ -108,4 +108,3 @@ const BookService = {
 }
 
 export default BookService
-

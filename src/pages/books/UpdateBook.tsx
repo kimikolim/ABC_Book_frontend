@@ -100,7 +100,7 @@ const UpdateBook = () => {
             genre: genreInput,
             yearPublished: yearPublished,
             availability: bookAvailable,
-            borrower: borrowerInput,
+            borrower: bookAvailable ? '' : borrowerInput,
           },
         }),
       )

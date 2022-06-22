@@ -23,7 +23,6 @@ You will also see any lint errors in the console.
 1. React
 1. MaterialUI
 1. Redux Toolkit
-1. React Toastify
 1. JWT authentication
 
 &nbsp;

@@ -13,10 +13,10 @@ const Homepage = () => {
 
   const { allBooks } = useAppSelector((state) => state.books)
   const dispatch = useAppDispatch()
+  
   React.useEffect(() => {
    dispatch(getAllBooks())
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allBooks])
+  },[])
 
 
   return (

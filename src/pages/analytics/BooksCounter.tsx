@@ -3,7 +3,6 @@ import { Box, Grid, Typography } from '@mui/material'
 import React from 'react'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
-import { useAppSelector } from '../../redux/hooks'
 
 interface Props {
   total: number
