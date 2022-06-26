@@ -32,12 +32,12 @@ For full stack with MongoDB, ensure docker running ABC__Book_backend on `http://
 #### Folders
 
 <strong><em>apis</em></strong> - contains all the functions that does the axios calls to backend.\
-<strong><em>components</em></strong> - contains the common shared components across pages\
-<strong><em>hooks</em></strong> - contains custom hooks\
-<strong><em>models</em></strong> - plain objects that represent business entities\
-<strong><em>pages</em></strong> - the different pages of the application and its associated components\
-<strong><em>redux</em></strong> - RTK redux store, slices, actions and reducers\
-<strong><em>utils</em></strong> - utility functions for JWT tokens
+<strong><em>components</em></strong> - contains the common shared components across pages.\
+<strong><em>hooks</em></strong> - contains custom hooks.\
+<strong><em>models</em></strong> - plain objects that represent business entities.\
+<strong><em>pages</em></strong> - the different pages of the application and its associated components.\
+<strong><em>redux</em></strong> - RTK redux store, slices, actions and reducers.\
+<strong><em>utils</em></strong> - utility functions for JWT tokens.
 
 
 ![Overview](https://github.com/kimikolim/ABC_Book_frontend/blob/master/public/uploads/React_structure.jpg?raw=true)
@@ -54,7 +54,7 @@ For full stack with MongoDB, ensure docker running ABC__Book_backend on `http://
 ## Completed So Far
 1. Full CRUD on Books
 1. Full CRUD on Users
-1. Borrow Logic
+1. Borrow & Return Logic
 1. Login/Logout Authentication with cookies
 1. Separation of roles with restricted access
 
@@ -62,11 +62,10 @@ For full stack with MongoDB, ensure docker running ABC__Book_backend on `http://
 
 ## Improvements
 Due to time constrains, several of the following should be implemented and improved upon as features/best practices
-1. Return Logic
 1. Analytics
 1. Data Validation
 1. Unit testing
-1. Better UI/UX template
+1. Better UI/UX
 
 
 &nbsp;

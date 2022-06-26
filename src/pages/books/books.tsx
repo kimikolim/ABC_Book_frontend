@@ -14,7 +14,6 @@ import BookList from './BookList'
  * List all Books
  * Valid logged in user can borrow/return books
  * Admin/Editor can add/remove/update book details
- * Features: sorting, pagination, filtering
  */
 
 const Books = () => {

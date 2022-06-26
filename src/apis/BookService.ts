@@ -96,6 +96,7 @@ const BookService = {
     try {
       const { data } = await axios.put(
         `http://localhost:3001/books/return/${bookId}`,
+        {},
         {
           headers: { authorization: `Bearer ${getAccessToken()}` },
         },

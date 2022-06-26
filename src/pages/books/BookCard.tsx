@@ -6,13 +6,14 @@ import Typography from '@mui/material/Typography'
 import { Box, Grid, Modal } from '@mui/material'
 
 import { Role } from '../../models/Role'
-import { isAuthorised } from '../../utils/accessToken'
+import { getCurrentUserId, isAuthorised } from '../../utils/accessToken'
 import { useAppDispatch } from '../../redux/hooks'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   borrowBook,
   deleteBook,
   getBookById,
+  returnBook,
 } from '../../redux/books/booksSlice'
 import { useNavigate } from 'react-router-dom'
 import { setEditBookMode } from '../../redux/books/bookEditSlice'
@@ -55,12 +56,21 @@ const BookCard: React.FC<Props> = ({
   availability,
   borrower,
 }) => {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState<boolean>(false)
+  const [isBookOwner, setIsBookOwner] = React.useState<boolean>(false)
   const handleOpenModal = () => setOpen(true)
   const handleClose = () => setOpen(false)
   const navigate = useNavigate()
 
   const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (getCurrentUserId() === borrower) {
+      setIsBookOwner(true)
+    } else {
+      setIsBookOwner(false)
+    }
+  }, [availability])
 
   const handleEditBook = async () => {
     dispatch(setEditBookMode())
@@ -73,8 +83,11 @@ const BookCard: React.FC<Props> = ({
   }
 
   const handleBorrowBtn = async () => {
-    console.log('borrow btn pressed')
     await dispatch(borrowBook(id))
+  }
+
+  const handleReturnBtn = async () => {
+    await dispatch(returnBook(id))
   }
 
   return (
@@ -96,11 +109,11 @@ const BookCard: React.FC<Props> = ({
             </Typography>
             <Button
               size="small"
-              color={availability ? 'success' : 'error'}
-              disabled={!availability}
-              onClick={handleBorrowBtn}
+              color={availability ? 'success' : 'info'}
+              disabled={!availability && !isBookOwner}
+              onClick={isBookOwner ? handleReturnBtn : handleBorrowBtn}
             >
-              Borrow
+              {isBookOwner ? 'Return' : 'Borrow'}
             </Button>
           </CardActions>
           {isAuthorised([Role.ADMIN, Role.EDITOR]) && (

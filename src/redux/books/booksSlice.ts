@@ -64,7 +64,6 @@ export const borrowBook = createAsyncThunk<IBook, string>(
   'books/borrowBook',
   async (payload, thunkAPI) => {
     try {
-      console.log(payload);
       const { book } = await BookService.borrowBook(payload)
       console.log(book)
       return book

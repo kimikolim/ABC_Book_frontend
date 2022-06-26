@@ -38,7 +38,7 @@ const UpdateUsers = () => {
    */
   const [nameInput, setNameInput] = useState('')
   const [emailInput, setEmailInput] = useState('')
-  const [roleInput, setRoleInput] = useState<Role>()
+  const [roleInput, setRoleInput] = useState<Role>(Role.MEMBER)
   const [passwordInput, setPasswordInput] = useState('')
   const [cfmPasswordInput, setCfmPasswordInput] = useState('')
 
