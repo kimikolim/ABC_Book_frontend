@@ -1,5 +1,7 @@
+import { CommentsDisabledOutlined } from '@mui/icons-material'
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import BookService from '../../apis/BookService'
+import { getCurrentUserId } from '../../utils/accessToken'
 
 export const getAllBooks = createAsyncThunk<IBook[]>(
   'books/getAllBooks',
@@ -119,14 +121,7 @@ const initialState: BookState = {
 const bookSlice = createSlice({
   name: 'books',
   initialState,
-  reducers: {
-    setAvailBooks: (state:any, action: PayloadAction) => {
-      state.availBooks = state.allBooks.map((book: IBook) => book.availability === true)
-    },
-    setBorrowedBooks: (state:any, action: PayloadAction) => {
-      state.borrowedBooks = state.allBooks.map((book: IBook) => book.borrower === action.payload)
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAllBooks.pending, (state, action) => {
       state.isLoading = true
@@ -135,6 +130,10 @@ const bookSlice = createSlice({
       state.isLoading = false
       state.allBooks = action.payload
       state.total = action.payload.length
+      state.availBooks = state.allBooks.filter((book: IBook) => book.availability === true)
+      state.borrowedBooks = state.allBooks.filter((book: IBook) => book.borrower === getCurrentUserId())
+
+
     })
     builder.addCase(getAllBooks.rejected, (state, action) => {
       state.isLoading = false
@@ -196,5 +195,6 @@ const bookSlice = createSlice({
 })
 
 // console.log(bookSlice)
+// export const { setAvailBooks, setBorrowedBooks } = bookSlice.actions
 
 export default bookSlice.reducer

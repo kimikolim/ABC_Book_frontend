@@ -9,14 +9,19 @@ import { getAllBooks } from '../../redux/books/booksSlice'
 
 const Homepage = () => {
   useGuard([Role.ADMIN, Role.EDITOR, Role.MEMBER])
-  const [currUserName, setCurrUserName] = useState('')
 
-  const { allBooks } = useAppSelector((state) => state.books)
+  const { allBooks, availBooks, borrowedBooks } = useAppSelector((state) => state.books)
   const dispatch = useAppDispatch()
   
   React.useEffect(() => {
-   dispatch(getAllBooks())
-  },[])
+    dispatch(getAllBooks()) // takes time
+    // dispatch(setAvailBooks())
+    // dispatch(setBorrowedBooks(getCurrentUserId()))
+  }, [])
+  
+  
+  // console.log('avail', availBooks)
+  // console.log('borrowed',borrowedBooks)
 
 
   return (
@@ -31,9 +36,9 @@ const Homepage = () => {
             mt: 2,
           }}
         >
-          Welcome {currUserName}!
+          Welcome!
         </Typography>
-        <BooksCounter total={allBooks.length} availableBooks={10} borrowedBooks={2}/>
+        <BooksCounter total={allBooks.length} availableBooks={availBooks!.length} borrowedBooks={borrowedBooks!.length}/>
       </Container>
     </>
   )
